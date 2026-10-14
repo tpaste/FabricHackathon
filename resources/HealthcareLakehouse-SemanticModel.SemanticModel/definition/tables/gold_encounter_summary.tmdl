@@ -1,0 +1,314 @@
+/// Summary of all patient encounters including type (ED, Inpatient, Outpatient), facility, diagnosis, length of stay, and charges
+table gold_encounter_summary
+	lineageTag: bc9dce22-2d36-4aa6-afa8-e68b274ebf1f
+	sourceLineageTag: [dbo].[gold_encounter_summary]
+
+	measure 'Total Encounters' = COUNTROWS(gold_encounter_summary)
+		formatString: 0
+		lineageTag: f004dad2-eb53-4f71-9175-22a3819ffe34
+
+		changedProperty = Name
+
+	measure 'ED Visits' =
+			
+			COUNTROWS(FILTER(gold_encounter_summary, gold_encounter_summary[encounter_type] = "ED"))
+		formatString: 0
+		lineageTag: c9a42f9c-1f62-4499-9a9e-22b2cf8b5ddf
+
+		changedProperty = Name
+
+	measure 'Inpatient Admissions' =
+			
+			COUNTROWS(FILTER(gold_encounter_summary, gold_encounter_summary[encounter_type] = "Inpatient"))
+		formatString: 0
+		lineageTag: b5dca31b-e643-43be-b37c-5af926660700
+
+		changedProperty = Name
+
+	measure 'Avg Length of Stay' =
+			
+			CALCULATE(
+			    AVERAGE(gold_encounter_summary[length_of_stay_days]),
+			    gold_encounter_summary[encounter_type] = "Inpatient",
+			    gold_encounter_summary[length_of_stay_days] > 0
+			)
+		lineageTag: 16d60505-7ad2-4eab-a213-a075b71c8002
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column encounter_id
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 32c532e3-93c4-4009-8615-8c95340e0ca2
+		sourceLineageTag: encounter_id
+		summarizeBy: none
+		sourceColumn: encounter_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column patient_id
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 7f85a48d-b07f-4d0c-976a-a0352d52b9da
+		sourceLineageTag: patient_id
+		summarizeBy: none
+		sourceColumn: patient_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column encounter_date
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: da5f0665-bf36-4450-b403-49189ffb8f06
+		sourceLineageTag: encounter_date
+		summarizeBy: none
+		sourceColumn: encounter_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column discharge_date
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: 9c87d607-59bf-47e4-8b59-7e51dba32c70
+		sourceLineageTag: discharge_date
+		summarizeBy: none
+		sourceColumn: discharge_date
+
+		annotation SummarizationSetBy = Automatic
+
+	/// ED, Inpatient, Outpatient, or Ambulatory
+	column encounter_type
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 57bc05d6-91c5-473a-81aa-155379ff8ea4
+		sourceLineageTag: encounter_type
+		summarizeBy: none
+		sourceColumn: encounter_type
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column facility_name
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 88fbe370-56af-4774-af85-8dd54b4acd66
+		sourceLineageTag: facility_name
+		summarizeBy: none
+		sourceColumn: facility_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column department
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 9a5275fb-bee5-4cb4-b8d9-f758ee07fb4d
+		sourceLineageTag: department
+		summarizeBy: none
+		sourceColumn: department
+
+		annotation SummarizationSetBy = Automatic
+
+	column primary_diagnosis_code
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: e2764781-22a4-4d0c-ad82-7a89ea534bbd
+		sourceLineageTag: primary_diagnosis_code
+		summarizeBy: none
+		sourceColumn: primary_diagnosis_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column primary_diagnosis_description
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 45d316be-5532-4f3f-84b4-168fe9e9eee3
+		sourceLineageTag: primary_diagnosis_description
+		summarizeBy: none
+		sourceColumn: primary_diagnosis_description
+
+		annotation SummarizationSetBy = Automatic
+
+	column attending_provider
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 44e804f3-f441-41ed-8735-61a5755dbbe9
+		sourceLineageTag: attending_provider
+		summarizeBy: none
+		sourceColumn: attending_provider
+
+		annotation SummarizationSetBy = Automatic
+
+	column discharge_disposition
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 94c4a8e2-4f02-478d-925d-6783a30198b3
+		sourceLineageTag: discharge_disposition
+		summarizeBy: none
+		sourceColumn: discharge_disposition
+
+		annotation SummarizationSetBy = Automatic
+
+	column length_of_stay_days
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: ab0ddb13-6350-472d-9628-dc9c312f9b4e
+		sourceLineageTag: length_of_stay_days
+		summarizeBy: sum
+		sourceColumn: length_of_stay_days
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_charges
+		dataType: double
+		sourceProviderType: float
+		lineageTag: 214dbda9-354d-4351-a046-719405c0f9bb
+		sourceLineageTag: total_charges
+		summarizeBy: sum
+		sourceColumn: total_charges
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column encounter_month
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: ada0b4f6-61f2-4f35-a529-fa92df0e90a2
+		sourceLineageTag: encounter_month
+		summarizeBy: none
+		sourceColumn: encounter_month
+
+		annotation SummarizationSetBy = Automatic
+
+	column encounter_year
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: c875aa2b-2944-4d5e-89aa-92acbd70b291
+		sourceLineageTag: encounter_year
+		summarizeBy: sum
+		sourceColumn: encounter_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column encounter_quarter
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 5324688f-0a26-4c1c-8657-6a5a683683ce
+		sourceLineageTag: encounter_quarter
+		summarizeBy: sum
+		sourceColumn: encounter_quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_of_week
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: d97a1a2f-0d38-47a1-8b72-bbc3d3d63040
+		sourceLineageTag: day_of_week
+		summarizeBy: sum
+		sourceColumn: day_of_week
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_weekend
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: 1d7b2c00-06a2-421d-ba54-136837cad2c4
+		sourceLineageTag: is_weekend
+		summarizeBy: none
+		sourceColumn: is_weekend
+
+		annotation SummarizationSetBy = Automatic
+
+	column los_category
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 6f2b0515-7e98-41c0-88d0-37417056e2da
+		sourceLineageTag: los_category
+		summarizeBy: none
+		sourceColumn: los_category
+
+		annotation SummarizationSetBy = Automatic
+
+	column age
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: d6013cef-0cf8-4f36-85e2-6350f21d5e3c
+		sourceLineageTag: age
+		summarizeBy: sum
+		sourceColumn: age
+
+		annotation SummarizationSetBy = Automatic
+
+	column age_group
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: d0b1873e-7e45-48b7-b226-9fab5205e120
+		sourceLineageTag: age_group
+		summarizeBy: none
+		sourceColumn: age_group
+
+		annotation SummarizationSetBy = Automatic
+
+	column gender
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 461c9312-ad2f-425f-a762-e0dd21ffe9bb
+		sourceLineageTag: gender
+		summarizeBy: none
+		sourceColumn: gender
+
+		annotation SummarizationSetBy = Automatic
+
+	column insurance_type
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: b4cac473-f432-4202-ac3e-3ed7d7981af6
+		sourceLineageTag: insurance_type
+		summarizeBy: none
+		sourceColumn: insurance_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column risk_category
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: d6dcbb91-a8ed-4850-8868-23c337059935
+		sourceLineageTag: risk_category
+		summarizeBy: none
+		sourceColumn: risk_category
+
+		annotation SummarizationSetBy = Automatic
+
+	column race
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 4bba1895-78ad-4e67-83ed-a5dd94b5b158
+		sourceLineageTag: race
+		summarizeBy: none
+		sourceColumn: race
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_encounter_summary = entity
+		mode: directLake
+		source
+			entityName: gold_encounter_summary
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	changedProperty = Description
+
+	annotation PBI_ResultType = Table
+

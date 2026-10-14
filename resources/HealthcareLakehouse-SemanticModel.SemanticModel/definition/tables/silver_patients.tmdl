@@ -1,0 +1,171 @@
+/// Patient demographics including age, gender, race, insurance, location, and risk score
+table silver_patients
+	lineageTag: f846d6bb-96f1-4c72-b774-877a68b5cd93
+	sourceLineageTag: [dbo].[silver_patients]
+
+	column patient_id
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 2f9f29df-10c3-43ba-b415-8ec19b672fa8
+		sourceLineageTag: patient_id
+		summarizeBy: none
+		sourceColumn: patient_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_name
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 3c5d663d-3a7f-4c86-9313-0a67784acf13
+		sourceLineageTag: first_name
+		summarizeBy: none
+		sourceColumn: first_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_name
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: cf376c01-1593-4d4b-8fa8-c1dbddb6fe59
+		sourceLineageTag: last_name
+		summarizeBy: none
+		sourceColumn: last_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_of_birth
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: 6deece2c-51c2-43b3-9436-cb8c7434d885
+		sourceLineageTag: date_of_birth
+		summarizeBy: none
+		sourceColumn: date_of_birth
+
+		annotation SummarizationSetBy = Automatic
+
+	column age
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: d4626f41-e5f3-4887-b1b8-d6c7d7a9b7e6
+		sourceLineageTag: age
+		summarizeBy: sum
+		sourceColumn: age
+
+		annotation SummarizationSetBy = Automatic
+
+	column age_group
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 2601dc60-ef92-4bf0-b803-112fbb36350e
+		sourceLineageTag: age_group
+		summarizeBy: none
+		sourceColumn: age_group
+
+		annotation SummarizationSetBy = Automatic
+
+	column gender
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 31e86e51-c978-4159-9c92-6ca3b378b671
+		sourceLineageTag: gender
+		summarizeBy: none
+		sourceColumn: gender
+
+		annotation SummarizationSetBy = Automatic
+
+	column race
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 583f5321-4fb9-42c2-8476-ce2a7364751d
+		sourceLineageTag: race
+		summarizeBy: none
+		sourceColumn: race
+
+		annotation SummarizationSetBy = Automatic
+
+	column zip_code
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 24490bba-e5e3-451c-b81b-573eaffe7cf6
+		sourceLineageTag: zip_code
+		summarizeBy: sum
+		sourceColumn: zip_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column city
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: e92c212c-1f73-4431-a2ac-934858dae893
+		sourceLineageTag: city
+		summarizeBy: none
+		sourceColumn: city
+
+		annotation SummarizationSetBy = Automatic
+
+	column state
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 354e5757-c957-4f3f-a274-0b55ea68b330
+		sourceLineageTag: state
+		summarizeBy: none
+		sourceColumn: state
+
+		annotation SummarizationSetBy = Automatic
+
+	column insurance_type
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 2fe993c0-838c-4792-a46b-f512b0ffb1cb
+		sourceLineageTag: insurance_type
+		summarizeBy: none
+		sourceColumn: insurance_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column primary_care_provider
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 2ca006e6-cb6a-4f78-99a1-ade6c089a6ab
+		sourceLineageTag: primary_care_provider
+		summarizeBy: none
+		sourceColumn: primary_care_provider
+
+		annotation SummarizationSetBy = Automatic
+
+	column risk_score
+		dataType: double
+		sourceProviderType: float
+		lineageTag: 4475ea1f-5cd1-48b9-91cf-cbe50a46484d
+		sourceLineageTag: risk_score
+		summarizeBy: sum
+		sourceColumn: risk_score
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column risk_category
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: c70fbb01-5399-49cf-8057-8e42300de3e6
+		sourceLineageTag: risk_category
+		summarizeBy: none
+		sourceColumn: risk_category
+
+		annotation SummarizationSetBy = Automatic
+
+	partition silver_patients = entity
+		mode: directLake
+		source
+			entityName: silver_patients
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	changedProperty = Description
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,301 @@
+/// Claims and billing data including payer, amounts charged, paid, denied, and claim status
+table gold_financial
+	lineageTag: 29d2f516-b79b-41fe-b451-87433597e410
+	sourceLineageTag: [dbo].[gold_financial]
+
+	measure 'Total Charges' = SUM(gold_financial[claim_amount])
+		lineageTag: 4b4b45f5-3b91-47d8-bc5e-2f7c38b12c4b
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Collections' = SUM(gold_financial[paid_amount])
+		lineageTag: e02aace6-420d-4fc6-bd92-13e6f2f390ed
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Ratio of paid amount to total charges
+	measure 'Collection Rate' =
+			
+			DIVIDE(
+			    SUM(gold_financial[paid_amount]),
+			    SUM(gold_financial[claim_amount]),
+			    0
+			)
+		lineageTag: 0ce0d8e5-33a1-4b0b-9e38-bababca12bd5
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Percentage of claims denied by payer
+	measure 'Denial Rate' =
+			
+			DIVIDE(
+			    COUNTROWS(FILTER(gold_financial, gold_financial[claim_status] = "Denied")),
+			    COUNTROWS(gold_financial),
+			    0
+			)
+		lineageTag: 53bf966c-e588-402f-8d5c-d0f101697595
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue Lost to Denials' =
+			
+			CALCULATE(
+			    SUM(gold_financial[claim_amount]),
+			    gold_financial[claim_status] = "Denied"
+			)
+		lineageTag: 9902edd0-da99-499b-a46b-e32020363483
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column encounter_id
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: b356674f-ca0b-4976-9b83-b1d92df3a646
+		sourceLineageTag: encounter_id
+		summarizeBy: none
+		sourceColumn: encounter_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column claim_id
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 674fd884-e45b-43f2-87cf-555c11e7de87
+		sourceLineageTag: claim_id
+		summarizeBy: none
+		sourceColumn: claim_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column patient_id
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 014bcf71-3e11-4414-b588-27baf5633b31
+		sourceLineageTag: patient_id
+		summarizeBy: none
+		sourceColumn: patient_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column claim_date
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: 0dc78b45-86bf-4547-bbe4-a7d525c60793
+		sourceLineageTag: claim_date
+		summarizeBy: none
+		sourceColumn: claim_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column payer
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 69c6924a-4c02-4d9b-b218-4ea563c626a7
+		sourceLineageTag: payer
+		summarizeBy: none
+		sourceColumn: payer
+
+		annotation SummarizationSetBy = Automatic
+
+	column payer_type
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: e48fb60b-1c06-4c48-92a9-f5355ecb9009
+		sourceLineageTag: payer_type
+		summarizeBy: none
+		sourceColumn: payer_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column claim_amount
+		dataType: double
+		sourceProviderType: float
+		lineageTag: bb4358e0-65e4-4010-aef2-7c7df59bbc96
+		sourceLineageTag: claim_amount
+		summarizeBy: sum
+		sourceColumn: claim_amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column paid_amount
+		dataType: double
+		sourceProviderType: float
+		lineageTag: 0a716a57-0afa-435d-9a0e-41827784e67d
+		sourceLineageTag: paid_amount
+		summarizeBy: sum
+		sourceColumn: paid_amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column denied_amount
+		dataType: double
+		sourceProviderType: float
+		lineageTag: d38a8017-c493-4f08-8cd7-d474c0a9af67
+		sourceLineageTag: denied_amount
+		summarizeBy: sum
+		sourceColumn: denied_amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column patient_responsibility
+		dataType: double
+		sourceProviderType: float
+		lineageTag: 12abe22e-b6df-4e7c-8096-8ba8de86decf
+		sourceLineageTag: patient_responsibility
+		summarizeBy: sum
+		sourceColumn: patient_responsibility
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column denial_reason
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 55f8d1bb-ffba-43b3-babd-b70da752e749
+		sourceLineageTag: denial_reason
+		summarizeBy: none
+		sourceColumn: denial_reason
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Paid, Denied, or Paid on Appeal
+	column claim_status
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 9fd44084-3a34-4b22-bda6-89700709fb88
+		sourceLineageTag: claim_status
+		summarizeBy: none
+		sourceColumn: claim_status
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column days_to_payment
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 0de58f9e-0a9c-47df-9d34-78c78e4d27ea
+		sourceLineageTag: days_to_payment
+		summarizeBy: sum
+		sourceColumn: days_to_payment
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_ratio
+		dataType: double
+		sourceProviderType: float
+		lineageTag: ef2b4c33-d406-4eae-8219-ad49d96ee9a8
+		sourceLineageTag: payment_ratio
+		summarizeBy: sum
+		sourceColumn: payment_ratio
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column is_denied
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: b86fe5df-84cf-4687-8f87-cf62ae6907d9
+		sourceLineageTag: is_denied
+		summarizeBy: none
+		sourceColumn: is_denied
+
+		annotation SummarizationSetBy = Automatic
+
+	column encounter_type
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: f2056f59-b948-4f7f-b6bf-154b98b17475
+		sourceLineageTag: encounter_type
+		summarizeBy: none
+		sourceColumn: encounter_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column facility_name
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 6b0c0a22-5083-4475-952b-2c9f1d900f5f
+		sourceLineageTag: facility_name
+		summarizeBy: none
+		sourceColumn: facility_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column department
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 4c6b3113-2cf3-42ee-9ac3-b48333b3bf0d
+		sourceLineageTag: department
+		summarizeBy: none
+		sourceColumn: department
+
+		annotation SummarizationSetBy = Automatic
+
+	column primary_diagnosis_description
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: e0b7fe47-71e8-4a65-924a-2a9493b446de
+		sourceLineageTag: primary_diagnosis_description
+		summarizeBy: none
+		sourceColumn: primary_diagnosis_description
+
+		annotation SummarizationSetBy = Automatic
+
+	column encounter_month
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: d1e97abb-0eba-48f7-8880-bc7add3c0fc2
+		sourceLineageTag: encounter_month
+		summarizeBy: none
+		sourceColumn: encounter_month
+
+		annotation SummarizationSetBy = Automatic
+
+	column encounter_year
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: cc6dc72f-c08f-4f8e-9242-b2d50e1fb1ab
+		sourceLineageTag: encounter_year
+		summarizeBy: sum
+		sourceColumn: encounter_year
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_financial = entity
+		mode: directLake
+		source
+			entityName: gold_financial
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	changedProperty = Description
+
+	annotation PBI_ResultType = Table
+

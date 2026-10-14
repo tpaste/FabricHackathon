@@ -1,0 +1,195 @@
+/// Contains 30-day readmission flags for all inpatient encounters, including index diagnosis, facility, and readmission status
+table gold_readmissions
+	lineageTag: 68fdd526-55e7-4ed3-8c56-ddae37e11c1a
+	sourceLineageTag: [dbo].[gold_readmissions]
+
+	/// Percentage of inpatient encounters followed by readmission within 30 days
+	measure 'Readmission Rate' =
+			
+			DIVIDE(
+			    COUNTROWS(FILTER(gold_readmissions, gold_readmissions[was_readmitted] = TRUE())),
+			    COUNTROWS(gold_readmissions),
+			    0
+			)
+		lineageTag: 45e24f83-422d-4458-a779-271166768268
+
+		changedProperty = Name
+
+		changedProperty = Description
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Readmissions' =
+			
+			COUNTROWS(FILTER(gold_readmissions, gold_readmissions[was_readmitted] = TRUE()))
+		formatString: 0
+		lineageTag: 52cde418-9b78-431e-b873-925f4cd578a4
+
+		changedProperty = Name
+
+	measure 'Total Index Admissions' = COUNTROWS(gold_readmissions)
+		formatString: 0
+		lineageTag: 8fd9747a-a318-46f7-8707-301f6ded5cd6
+
+		changedProperty = Name
+
+	column index_encounter_id
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: e2304b55-9f29-4eaa-bc83-ca0df3b7d3ee
+		sourceLineageTag: index_encounter_id
+		summarizeBy: none
+		sourceColumn: index_encounter_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column patient_id
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 518a41ff-ccef-4a7b-b0fe-5833f052f209
+		sourceLineageTag: patient_id
+		summarizeBy: none
+		sourceColumn: patient_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column index_admission_date
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: b38b0d9e-d884-4de3-8251-a4bf95a55dee
+		sourceLineageTag: index_admission_date
+		summarizeBy: none
+		sourceColumn: index_admission_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column index_discharge_date
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: 0061e1b7-b51a-41c0-939f-9f67a19d3024
+		sourceLineageTag: index_discharge_date
+		summarizeBy: none
+		sourceColumn: index_discharge_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column index_diagnosis_code
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 20e96c1e-cbe4-4d20-aa90-5d3f5b4da61b
+		sourceLineageTag: index_diagnosis_code
+		summarizeBy: none
+		sourceColumn: index_diagnosis_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column index_diagnosis
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: a74708b4-49f5-472e-938a-7be90445e38f
+		sourceLineageTag: index_diagnosis
+		summarizeBy: none
+		sourceColumn: index_diagnosis
+
+		annotation SummarizationSetBy = Automatic
+
+	column index_facility
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 3eedb30e-2cef-4f55-80ad-18a73941f2bb
+		sourceLineageTag: index_facility
+		summarizeBy: none
+		sourceColumn: index_facility
+
+		annotation SummarizationSetBy = Automatic
+
+	column index_provider
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 3bc072bb-9d5d-43f7-9e04-9ebff0f3dbaf
+		sourceLineageTag: index_provider
+		summarizeBy: none
+		sourceColumn: index_provider
+
+		annotation SummarizationSetBy = Automatic
+
+	column index_los
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 2b6a3bad-e610-4fb9-b121-09f1d27cb8ea
+		sourceLineageTag: index_los
+		summarizeBy: sum
+		sourceColumn: index_los
+
+		annotation SummarizationSetBy = Automatic
+
+	column index_disposition
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: a781ca05-def2-4915-be5d-4e5bff4f1eed
+		sourceLineageTag: index_disposition
+		summarizeBy: none
+		sourceColumn: index_disposition
+
+		annotation SummarizationSetBy = Automatic
+
+	column readmit_encounter_id
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 25296b2b-b3fa-4c8b-b60d-959fcbd5cdc6
+		sourceLineageTag: readmit_encounter_id
+		summarizeBy: none
+		sourceColumn: readmit_encounter_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column readmit_date
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: 12d5439a-17d5-426b-97f9-3e557c8b899f
+		sourceLineageTag: readmit_date
+		summarizeBy: none
+		sourceColumn: readmit_date
+
+		annotation SummarizationSetBy = Automatic
+
+	/// TRUE if patient was readmitted within 30 days of discharge
+	column was_readmitted
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: 256f5c85-4646-45ac-a82f-94621b820e81
+		sourceLineageTag: was_readmitted
+		summarizeBy: none
+		sourceColumn: was_readmitted
+
+		changedProperty = Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column days_to_readmission
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: dbbd7cc5-b8c0-4334-badb-a04888cd5572
+		sourceLineageTag: days_to_readmission
+		summarizeBy: sum
+		sourceColumn: days_to_readmission
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_readmissions = entity
+		mode: directLake
+		source
+			entityName: gold_readmissions
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	changedProperty = Description
+
+	annotation PBI_ResultType = Table
+

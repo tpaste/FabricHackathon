@@ -1,0 +1,135 @@
+/// Emergency department visit patterns and utilization metrics per patient
+table gold_ed_utilization
+	lineageTag: ffe94046-ce94-4123-8b8e-28381f5e768d
+	sourceLineageTag: [dbo].[gold_ed_utilization]
+
+	column patient_id
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: f851d1af-f4f5-4c7e-a3d7-381248b72a87
+		sourceLineageTag: patient_id
+		summarizeBy: none
+		sourceColumn: patient_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column encounter_year
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: e9be0410-5cb4-4514-8892-419ae16b39c2
+		sourceLineageTag: encounter_year
+		summarizeBy: sum
+		sourceColumn: encounter_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column ed_visit_count
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 969ee48e-5084-457e-8201-d6da935f5370
+		sourceLineageTag: ed_visit_count
+		summarizeBy: sum
+		sourceColumn: ed_visit_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column facilities_visited
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 7d82ad2c-761e-4742-916c-dbabac4792c1
+		sourceLineageTag: facilities_visited
+		summarizeBy: sum
+		sourceColumn: facilities_visited
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_ed_charges
+		dataType: double
+		sourceProviderType: float
+		lineageTag: a84fac98-680c-48bf-bb46-016b69248e3d
+		sourceLineageTag: total_ed_charges
+		summarizeBy: sum
+		sourceColumn: total_ed_charges
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column is_frequent_flyer
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: f928a51f-a9a1-4f84-a547-38402b56892c
+		sourceLineageTag: is_frequent_flyer
+		summarizeBy: none
+		sourceColumn: is_frequent_flyer
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_name
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: c4df6b8b-cf86-4b45-9718-46898861aa0b
+		sourceLineageTag: first_name
+		summarizeBy: none
+		sourceColumn: first_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_name
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: e04b0296-27a0-48a9-8f2b-9224bf4c180d
+		sourceLineageTag: last_name
+		summarizeBy: none
+		sourceColumn: last_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column age
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 1c649ce5-0bde-45fe-911f-1bb729d7e878
+		sourceLineageTag: age
+		summarizeBy: sum
+		sourceColumn: age
+
+		annotation SummarizationSetBy = Automatic
+
+	column insurance_type
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 1813d6b7-4e4e-4e7c-834c-0d96adaab472
+		sourceLineageTag: insurance_type
+		summarizeBy: none
+		sourceColumn: insurance_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column risk_score
+		dataType: double
+		sourceProviderType: float
+		lineageTag: 5980461f-fa78-4a13-8c90-7a2f8a4985ab
+		sourceLineageTag: risk_score
+		summarizeBy: sum
+		sourceColumn: risk_score
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition gold_ed_utilization = entity
+		mode: directLake
+		source
+			entityName: gold_ed_utilization
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	changedProperty = Description
+
+	annotation PBI_ResultType = Table
+
