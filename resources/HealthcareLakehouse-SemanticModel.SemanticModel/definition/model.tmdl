@@ -1,0 +1,25 @@
+model Model
+	culture: en-US
+	collation: Latin1_General_100_BIN2_UTF8
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["DatabaseQuery"]
+
+annotation PBI_ProTooling = ["WebModelingEdit","CopilotTooling"]
+
+ref table gold_encounter_summary
+ref table silver_patients
+ref table gold_financial
+ref table gold_ed_utilization
+ref table gold_readmissions
+ref table gold_population_health
+ref table gold_alos
+
+ref cultureInfo en-US
+

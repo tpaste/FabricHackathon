@@ -1,0 +1,29 @@
+relationship 172aa3d2-2b3e-f4d4-87a4-f313bdf0a1de
+	relyOnReferentialIntegrity
+	fromColumn: gold_encounter_summary.patient_id
+	toColumn: silver_patients.patient_id
+
+relationship 37a5ac09-8b6a-8724-3bfd-51b87ebb6bf3
+	relyOnReferentialIntegrity
+	fromColumn: gold_readmissions.patient_id
+	toColumn: silver_patients.patient_id
+
+relationship cd9c1741-9607-bafb-8ff6-1fbeb8a99057
+	crossFilteringBehavior: bothDirections
+	relyOnReferentialIntegrity
+	fromCardinality: one
+	fromColumn: gold_financial.encounter_id
+	toColumn: gold_encounter_summary.encounter_id
+
+relationship 36cd12f3-7df6-c931-cf1b-dff961a11bb2
+	crossFilteringBehavior: bothDirections
+	relyOnReferentialIntegrity
+	fromCardinality: one
+	fromColumn: gold_population_health.patient_id
+	toColumn: silver_patients.patient_id
+
+relationship 01504f79-0619-af38-c6f5-1ecb003ec350
+	relyOnReferentialIntegrity
+	fromColumn: gold_ed_utilization.patient_id
+	toColumn: silver_patients.patient_id
+
